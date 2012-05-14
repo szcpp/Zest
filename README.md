@@ -1,1 +1,3 @@
-# NOTHIN'
+Zest
+========
+Small and fast ncurses based p2p communicator with GPG encryption.
