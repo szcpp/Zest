@@ -20,13 +20,12 @@ class Interface
 		void init();
 		void deinit();
 		int recreate();
+		static void winchSignalHandler(int sig);
 	private:
 		static Interface *interface_;
 		Interface();
 		WINDOW* my_wins[3];
 		PANEL* my_panels[3];
 };
-
-void winchSignalHandler(int sig);
 
 #endif

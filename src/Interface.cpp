@@ -1,5 +1,4 @@
 #include "Interface.hpp"
-
 Interface* Interface::interface_=NULL;
 
 Interface& Interface::interface()
@@ -47,7 +46,7 @@ void Interface::deinit()
 	endwin();
 }
 
-void winchSignalHandler(int sig)
+void Interface::winchSignalHandler(int sig)
 {
 	signal(SIGWINCH, SIG_IGN);
 	Interface::interface().recreate();
