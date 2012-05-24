@@ -2,6 +2,8 @@
 #define _P2PConnection_hpp_
 #include "Message.hpp"
 
+#define COMMUNICATION_PORT 7935
+
 /**
 	@brief     Peer to peer connection class.
  	@details   P2P connection class. Represends single connection beetween users.
