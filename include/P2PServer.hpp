@@ -28,7 +28,7 @@ public:
 		Sets server port.
 		@param port port.
 	*/
-	void setPort(const unsigned int port)
+	void setPort(const unsigned int port);
 private:
 	/**
 		A socket handler.
@@ -37,7 +37,7 @@ private:
 	/**
 		Class used to throw an object, when problem with starting server appears.
 	*/
-	class xCouldNotStart();
+	class xCouldNotStart{};
 };
 
 #endif

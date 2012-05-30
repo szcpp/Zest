@@ -1,5 +1,5 @@
-#ifndef _observer_hpp_
-#define _observer_hpp_
+#ifndef _Observer_hpp_
+#define _Observer_hpp_
 /**
 	@brief     Observer class.
  	@details   Observer pattern implementation.

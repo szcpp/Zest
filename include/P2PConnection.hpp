@@ -1,5 +1,6 @@
 #ifndef _P2PConnection_hpp_
 #define _P2PConnection_hpp_
+#include "Observable.hpp"
 #include "Message.hpp"
 
 #define COMMUNICATION_PORT 7935
@@ -28,12 +29,12 @@ public:
 		@param msg message to be sent.
 		@return true on success.
 	*/
-	bool send(const Message msg);
+	// bool send(const Message msg);
 	/**
 		Reads message from socket.
 		@return Message.
 	*/
-	Message receive();
+	//Message receive();
 private:
 	/**
 		Connection handle.
@@ -45,4 +46,4 @@ private:
 	class xConnectionFailure{};
 };
 
-#ifndef
+#endif

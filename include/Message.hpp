@@ -30,12 +30,13 @@ public:
 		@param type type of message.
 		@param content content of message. If type is set to STATUS_CHANGE_AVAILIBLE or STATUS_CHANGE_OFFLINE, contents of this field is ignored.
 	*/
-	Message(const Contact *_contact, const Type type, const std::string content);
+	// Message(const Contact *_contact, const Type type, const std::string content);
+	Message();
 private:
 	/**
 		A pointer to a element in contact list.
 	*/
-	Contact *_contact;
+	//Contact *_contact;
 	/**
 		Type of message.
 	*/

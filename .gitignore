@@ -1,3 +1,10 @@
 /bin/
+/doc/html/
+/doc/latex/
 /tmp/
 *~
+*.o
+*.aux
+*.log
+*.pdf
+zest

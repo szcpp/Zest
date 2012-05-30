@@ -28,7 +28,7 @@ public:
 		A constructor
 		@param name a name of contact.
 	*/
-	Contact(const string name);
+	Contact(const std::string name);
 	~Contact();
 	/**
 		Checks status of contact
@@ -44,7 +44,7 @@ private:
 		A pointer to connection object.
 		When contact is not connectet, it is set to null.
 	*/
-	P2PConnection * _connection;
+	//P2PConnection * _connection;
 	/**
 		Current status.
 	*/

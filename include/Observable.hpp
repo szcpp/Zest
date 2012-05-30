@@ -1,5 +1,5 @@
-#ifndef _observable_hpp_
-#define _observable_hpp_
+#ifndef _Observable_hpp_
+#define _Observable_hpp_
 #include <vector>
 #include "Observer.hpp"
 

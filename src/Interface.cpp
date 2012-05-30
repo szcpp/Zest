@@ -52,11 +52,3 @@ void Interface::winchSignalHandler(int sig)
 	Interface::interface().recreate();
 	signal(SIGWINCH, winchSignalHandler);
 }
-
-int main(int argc, char *argv[])
-{
-	Interface::interface().init();
-	while(getch() != 27) ;
-	Interface::interface().deinit();
-	return 0;
-}
