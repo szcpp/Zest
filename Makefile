@@ -19,7 +19,7 @@ zest: $(OBJS)
 	echo -e "\033[01;33m[make]\033[00;32m Linking all files..."
 	echo -e "\033[01;33m[make]\033[01;36m $(addprefix $(DIR_OBJ), $^) \t\033[00;31m$(LFLAGS)\033[00m"
 	$(CXX) $(LFLAGS) $(addprefix $(DIR_OBJ), $^) -o $(DIR_BIN)zest
-	ln -s $(DIR_BIN)zest ./zest
+	ln -s -f $(DIR_BIN)zest ./zest
 	echo -e "\033[01;33m[make]\033[01;36m $(DIR_BIN)zest \033[00;32m has been built successfully. \033[00m"
 
 $(OBJS): %.o: %.cpp
