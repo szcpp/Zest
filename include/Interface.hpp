@@ -21,6 +21,7 @@ class Interface
 		static Interface &interface();
 		void init();
 		void deinit();
+		void Scroll(int how);
 		int recreate();
 		void updatePanels();
 		void browse();
@@ -30,6 +31,7 @@ class Interface
 		InputField* _inputField;
 		InterfaceIndicator* _interfaceIndicator;
 		void Write(char* when, int who, char* what)	;
+		int ChatScroll=0;
 	private:
 		static Interface *interface_;
 		std::map<char*,char*> messages;

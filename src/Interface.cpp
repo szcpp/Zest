@@ -11,6 +11,7 @@ Interface::Interface()
 {
 	init();
 	signal(SIGWINCH, winchSignalHandler);
+	//ChatScroll=0;
 }
 
 int Interface::recreate()
@@ -68,14 +69,27 @@ void Interface::winchSignalHandler(int sig)
 void Interface::Write(char* when, int who, char* what)
 {
 	messages[when]=what;
-	_chatWindow->Write(messages.size(), when, who, what);
+	if(messages.size()<LINES-3)_chatWindow->Write(messages.size(), when, who, what);
+	if(messages.size()>LINES-3)
+	{
+		ChatScroll++;
+		recreate();
+	}
 }
 void Interface::rewrite()
 {
 	int i=1;
 	for (std::map<char*, char*>::iterator it = messages.begin(); it != messages.end(); ++it,++i)
 	{
-		_chatWindow->Write(i, it->first,1,it->second);
+		if(i<=ChatScroll) ;
+		if(i>ChatScroll&&i<ChatScroll+LINES-3) _chatWindow->Write(i-ChatScroll, it->first,1,it->second);
 	}
 	refresh();
+}
+void Interface::Scroll(int how)
+{
+	if(how<0) if(ChatScroll!=0) ChatScroll+=how;
+	if(how>0) if(messages.size()-ChatScroll>LINES-2) ChatScroll+=how;
+	recreate();
+	updatePanels();
 }
