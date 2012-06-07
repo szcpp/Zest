@@ -3,13 +3,14 @@
 #include <ncurses.h>
 #include <panel.h>
 #include <signal.h>
+#include <iostream>
 
 /**
 	@brief     ChatWindow class.
  	@details   Inheritance from class PANEL. It is created while a new talk is being started and refreshed after any message has been received.
  	@author    Anna Zaborowska
- 	@version   0.1a
- 	@date      26.05.2012
+ 	@version   0.1b
+ 	@date      07.06.2012
  	@copyright GNU Public License.
  */
 
@@ -18,8 +19,11 @@ class ChatWindow : public PANEL
 	public:
 		ChatWindow();
 		//refresh();
-	private:
+		void Write(int where, char* when,int who, char* what);
 		WINDOW* _win;
+	private:
+		//chtype colourSb;
+		//chtype colourMe;
 };
 
 #endif
