@@ -1,5 +1,12 @@
 #ifndef _P2PServer_hpp_
 #define _P2PServer_hpp_
+#include <errno.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <iostream>
+#include <cstring>
+#include <boost/thread.hpp>
+#include "P2PConnection.hpp"
 
 /**
 	@brief     Server class.
@@ -9,31 +16,47 @@
  	@date      05.2012
  	@copyright GNU Public License.
  */
-class P2PServer
+class P2PServer : public Observable<P2PConnection>
 {
 public:
 	/**
 		A constructor.
+	*/
+	P2PServer(const unsigned int port = COMMUNICATION_PORT);
+	~P2PServer(){};
+	/**
+		Starts the server.
 		@param port port on which server will be listening.
 		@exception P2PServer::xCouldNotStart error during start of server.
 	*/
-	P2PServer(const unsigned int port);
-	~P2PServer();
+	bool start();
 	/**
-		Restarts the server
-		@return true on success.
+		Stops the server.
+		@return true on success
 	*/
-	bool restart();
-	/**
-		Sets server port.
-		@param port port.
-	*/
-	void setPort(const unsigned int port);
+	bool stop() { return (close(_socket) >= 0); };
 private:
+	/**
+		A port number.
+	*/
+	int _portNumber;
 	/**
 		A socket handler.
 	*/
-	int _sock;
+	int _socket;
+	/**
+		All connections.
+	*/
+	std::vector<P2PConnection*> _connections;
+	/**
+		Creates socket, and binds to it
+		@return true on success
+	*/
+	bool _createSocket();
+	/**
+		Listens for new connections
+	*/
+	void _listen();
 	/**
 		Class used to throw an object, when problem with starting server appears.
 	*/

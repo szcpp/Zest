@@ -1,6 +1,7 @@
 #ifndef _Observable_hpp_
 #define _Observable_hpp_
 #include <vector>
+#include <iostream>
 #include "Observer.hpp"
 
 /**
@@ -11,7 +12,7 @@
  	@date      05.2012
  	@copyright GNU Public License.
  */
-class Observable
+template <typename T> class Observable
 {
 public:
 	Observable(){};
@@ -22,15 +23,23 @@ public:
 		@param obs Observer object.
 		@see Observer
 	*/
-	void addObserver(Observer* obs);
+	void addObserver(Observer<T>* obs)
+	{
+		_observers.push_back(obs);
+	}
 
 	/**
 		Notifies all observers about change.
+		@param T* a pointer being passed to all observers
 		@see Observer
 	*/
-	const void notifyObservers();
+	const void notifyObservers(T* data)
+	{
+		for(auto it = _observers.begin(); it != _observers.end(); ++it)
+			(*it)->update(data);
+	}
 private:
-	std::vector<Observer*> _observers;
+	std::vector<Observer<T>* > _observers;
 };
 
 #endif

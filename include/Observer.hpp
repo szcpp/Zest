@@ -8,15 +8,16 @@
  	@date      05.2012
  	@copyright GNU Public License.
  */
-class Observer
+template <typename T> class Observer
 {
 public:
 	Observer();
 	virtual ~Observer();
 	/**
 		Updates itself. Called from Observable.
+		@param T* a pointer from observable object.
 	*/
-	virtual void update() = 0;
+	virtual void update(T*) = 0;
 };
 
 #endif

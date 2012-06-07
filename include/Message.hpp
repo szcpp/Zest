@@ -1,6 +1,5 @@
 #ifndef _Message_hpp_
 #define _Message_hpp_
-#include "Contact.hpp"
 #include <string>
 
 
@@ -14,6 +13,7 @@
  */
 class Message
 {
+public:
 	/**
 		Type of message
 	*/
@@ -23,27 +23,17 @@ class Message
 		STATUS_CHANGE_OFFLINE = 1,		/**< Unavailibility notification. */
 		MESSAGE = 2 					/**< Regular message. */
 	};
-public:
 	/**
-		A constructor.
-		@param _contact pointer to a contact, which i sender or receipient.
-		@param type type of message.
-		@param content content of message. If type is set to STATUS_CHANGE_AVAILIBLE or STATUS_CHANGE_OFFLINE, contents of this field is ignored.
+		IP Address of sender
 	*/
-	// Message(const Contact *_contact, const Type type, const std::string content);
-	Message();
-private:
-	/**
-		A pointer to a element in contact list.
-	*/
-	//Contact *_contact;
+	std::string ipAddress;
 	/**
 		Type of message.
 	*/
-	Type _type;
+	Type type;
 	/**
 		Content of message.
 	*/
-	std::string _content;
+	std::string content;
 };
 #endif
