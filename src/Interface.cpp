@@ -17,6 +17,7 @@ int Interface::recreate()
 {
 	deinit();
 	init();
+	rewrite();
 	return 1;
 }
 
@@ -25,22 +26,32 @@ void Interface::init()
 	initscr();
 	refresh();
 	clear();
-	// Create windows for the panels
-	my_wins[0] = newwin( LINES/2, COLS/2, 0,0);
-	my_wins[1] = newwin( LINES/2, COLS/2, 0,COLS/2);
-	my_wins[2] = newwin( LINES/2, COLS, LINES/2,0);
-
-	//Create borders around the windows
-	for(int i = 0; i < 3; ++i) box(my_wins[i], 0, 0);
-
-	// Attach a panel to each window  	(Order is bottom up)
-	my_panels[0] = new_panel(my_wins[0]); 
-	my_panels[1] = new_panel(my_wins[1]);
-	my_panels[2] = new_panel(my_wins[2]);
-
-	update_panels(); // Update the stacking order. 2nd panel will be on top
-	doupdate();	//Show it on the screen
+	_contactList = new ContactList();	
+	_chatWindow = new ChatWindow();	
+	_interfaceIndicator = new InterfaceIndicator();	
+	_inputField = new InputField();
+/*	set_panel_userptr(_contactList, _inputField);
+	set_panel_userptr(_inputField, _chatWindow);
+	set_panel_userptr(_chatWindow, _interfaceIndicator);
+	set_panel_userptr(_interfaceIndicator, _contactList);
+	top=_inputField;
+	*/
+	updatePanels();
 }
+void Interface::updatePanels()
+{
+	update_panels();
+	doupdate();
+}
+/*
+void Interface::browse()
+{
+	top = (PANEL *)panel_userptr(top);
+	top_panel(top);	
+	updatePanels();	
+
+}
+*/
 void Interface::deinit()
 {
 	endwin();
@@ -50,5 +61,21 @@ void Interface::winchSignalHandler(int sig)
 {
 	signal(SIGWINCH, SIG_IGN);
 	Interface::interface().recreate();
+	Interface::interface().rewrite();
 	signal(SIGWINCH, winchSignalHandler);
+}
+
+void Interface::Write(char* when, int who, char* what)
+{
+	messages[when]=what;
+	_chatWindow->Write(messages.size(), when, who, what);
+}
+void Interface::rewrite()
+{
+	int i=1;
+	for (std::map<char*, char*>::iterator it = messages.begin(); it != messages.end(); ++it,++i)
+	{
+		_chatWindow->Write(i, it->first,1,it->second);
+	}
+	refresh();
 }
