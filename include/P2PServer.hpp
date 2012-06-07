@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cstring>
 #include <boost/thread.hpp>
+#include <signal.h>
 #include "P2PConnection.hpp"
 
 /**
@@ -23,7 +24,7 @@ public:
 		A constructor.
 	*/
 	P2PServer(const unsigned int port = COMMUNICATION_PORT);
-	~P2PServer(){};
+	~P2PServer(){ delete _thread;};
 	/**
 		Starts the server.
 		@param port port on which server will be listening.
@@ -34,8 +35,17 @@ public:
 		Stops the server.
 		@return true on success
 	*/
-	bool stop() { return (close(_socket) >= 0); };
+	bool stop();
+	/**
+		Listens for new connections.
+		Entry point for a thread.
+	*/
+	void operator()();
 private:
+	/**
+		A pointer to server thread.
+	*/
+	boost::thread * _thread;
 	/**
 		A port number.
 	*/
@@ -53,10 +63,6 @@ private:
 		@return true on success
 	*/
 	bool _createSocket();
-	/**
-		Listens for new connections
-	*/
-	void _listen();
 	/**
 		Class used to throw an object, when problem with starting server appears.
 	*/

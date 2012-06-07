@@ -42,6 +42,12 @@ void P2PConnection::operator()()
 	uint8_t type;
 	uint16_t length, receivedSignature;
 	Message * msg = 0;
+	// we are now listening, so, status = online
+	msg = new Message;
+	msg->type = Message::STATUS_CHANGE_AVAILIBLE;
+	notifyObservers(msg);
+	delete msg;
+	msg = 0;
 	while(true)
 	{
 		msg = new Message;
@@ -72,6 +78,11 @@ void P2PConnection::operator()()
 		notifyObservers(msg);
 		delete msg;
 	}
+	// so if we are here, the connection is close and peer went offline
+	msg = new Message;
+	msg->type = Message::STATUS_CHANGE_OFFLINE;
+	notifyObservers(msg);
+	delete msg;
 }
 
 bool P2PConnection::send(const Message &msg)

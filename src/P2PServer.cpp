@@ -6,8 +6,21 @@ bool P2PServer::start()
 {
 	if(!_createSocket())
 		return false;
-	_listen();
+	_thread = new boost::thread(boost::ref(*this));
+	_thread->join(); // in case of continous running - COMMENT THIS LINE
 	return true;
+}
+
+bool P2PServer::stop()
+{
+	if(_thread != 0)
+	{
+		// waiting for new sockets never ends, so, we have to kill it!
+		pthread_kill(_thread->native_handle(), SIGKILL);
+		delete _thread;
+		_thread = 0;
+	}
+	return (close(_socket) >= 0);
 }
 
 bool P2PServer::_createSocket()
@@ -49,7 +62,7 @@ bool P2PServer::_createSocket()
 	return true;;
 }
 
-void P2PServer::_listen()
+void P2PServer::operator()()
 {
 	sockaddr_in sadr;
 	socklen_t addr_size = sizeof(sockaddr_in);

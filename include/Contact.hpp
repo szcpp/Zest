@@ -15,6 +15,7 @@
 
 class Contact
 {
+public:
 	/**
 	*	Type representing status
 	*/
@@ -23,7 +24,6 @@ class Contact
 		AVAILIBLE = 0,	/**< value representing contact being online */
 		OFFLINE = 1,	/**< value representing contact being offline */
 	};
-public:
 	/**
 		A constructor
 		@param name a name of contact.
@@ -44,7 +44,7 @@ private:
 		A pointer to connection object.
 		When contact is not connectet, it is set to null.
 	*/
-	//P2PConnection * _connection;
+	P2PConnection * _connection;
 	/**
 		Current status.
 	*/

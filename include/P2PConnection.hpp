@@ -57,6 +57,10 @@ public:
 		@return true on success.
 	*/
 	bool closeSocket() { return (close(_socket) >= 0); };
+	/**
+		Returns IP address of remote host.
+	*/
+	const std::string getIP() const { return _ipAddress; }
 private:
 	/**
 		IP address of remote host

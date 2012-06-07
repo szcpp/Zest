@@ -11,8 +11,8 @@
 template <typename T> class Observer
 {
 public:
-	Observer();
-	virtual ~Observer();
+	Observer(){};
+	virtual ~Observer(){};
 	/**
 		Updates itself. Called from Observable.
 		@param T* a pointer from observable object.
