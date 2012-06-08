@@ -8,8 +8,8 @@
 	@brief     InputField class.
  	@details   Inheritance from class PANEL. Any message is typed in that field, it handles all the keyboard shortcuts.
  	@author    Anna Zaborowska
- 	@version   0.1a
- 	@date      26.05.2012
+ 	@version   0.1b
+ 	@date      08.06.2012
  	@copyright GNU Public License.
  */
 
@@ -17,9 +17,11 @@ class InputField : public PANEL
 {
 	public:
 		InputField();
-		void Write(char* str);
-	private:
+		void Write(int x,char ch);
+		void Clear();
+		void Del(int x);
 		WINDOW* _win;
+	private:
 };
 
 #endif

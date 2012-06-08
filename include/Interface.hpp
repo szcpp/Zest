@@ -10,8 +10,8 @@
 	@brief     Interface class.
  	@details   Singleton pattern implementation, ncurses library usage to create windows.
  	@author    Anna Zaborowska
- 	@version   0.1c
- 	@date      07.06.2012
+ 	@version   0.1d
+ 	@date      08.06.2012
  	@copyright GNU Public License.
  */
 
@@ -30,11 +30,14 @@ class Interface
 		ChatWindow* _chatWindow;
 		InputField* _inputField;
 		InterfaceIndicator* _interfaceIndicator;
-		void Write(char* when, int who, char* what)	;
+		void Write(std::string when, int who, std::string what);
+		void WriteInput(int x,char ch);
+		void DelInput(int x);
+		void ClearInput();
 		int ChatScroll=0;
 	private:
 		static Interface *interface_;
-		std::map<char*,char*> messages;
+		std::map<std::pair<std::string, int>,std::string> messages;
 		void rewrite();
 		//PANEL* top;
 		Interface();

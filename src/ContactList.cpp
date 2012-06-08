@@ -6,4 +6,3 @@ ContactList::ContactList()
 	box(_win, 0, 0);
 	new_panel(_win);
 }
-
