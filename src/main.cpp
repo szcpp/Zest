@@ -27,7 +27,8 @@ int main(int argc, char *argv[])
 			if(ch== KEY_DOWN) {Interface::interface().Scroll(1);}
 			else
 			{
-				if(ch==KEY_BACKSPACE)
+				if(ch==127) // TODO Delete key ;)
+				//if(ch==KEY_BACKSPACE)
 				{
 					Interface::interface().DelInput(x);
 					x--;

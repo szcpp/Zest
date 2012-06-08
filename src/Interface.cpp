@@ -29,7 +29,7 @@ void Interface::init()
 	initscr();
 	refresh();
 	clear();
-	sleep(100);
+	// sleep(100);
 	_contactList = new ContactList();	
 	_chatWindow = new ChatWindow();	
 	_interfaceIndicator = new InterfaceIndicator();	

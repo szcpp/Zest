@@ -22,6 +22,7 @@ class ContactList : public PANEL
 		//refresh();
 		//checkStatuses();
 	private:
+		WINDOW* _win;
 };
 
 #endif
