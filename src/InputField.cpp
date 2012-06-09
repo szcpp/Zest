@@ -7,8 +7,7 @@ InputField::InputField()
 }
 void InputField::Write(int x, char ch)
 {
-	if(ch == 'q') mvwaddch(_win,0,x-1,' ');
-	else mvwaddch(_win,0,x,ch);
+	mvwaddch(_win,0,x,ch);
 	wrefresh(_win);
 }
 void InputField::Clear()

@@ -1,5 +1,5 @@
 #include "Interface.hpp"
-#include<unistd.h>
+#include <unistd.h>
 
 Interface* Interface::interface_=NULL;
 
@@ -13,7 +13,6 @@ Interface::Interface()
 {
 	init();
 	signal(SIGWINCH, winchSignalHandler);
-	//ChatScroll=0;
 }
 
 int Interface::recreate()
@@ -21,6 +20,7 @@ int Interface::recreate()
 	deinit();
 	init();
 	rewrite();
+	RecreateChat();
 	return 1;
 }
 
@@ -29,17 +29,12 @@ void Interface::init()
 	initscr();
 	refresh();
 	clear();
-	// sleep(100);
-	_contactList = new ContactList();	
-	_chatWindow = new ChatWindow();	
+	_contactList = new ContactList();
+	_chatWindow=new ChatWindow();
+	AddContacts();
+	_contactList->CreateList(choices);
 	_interfaceIndicator = new InterfaceIndicator();	
 	_inputField = new InputField();
-/*	set_panel_userptr(_contactList, _inputField);
-	set_panel_userptr(_inputField, _chatWindow);
-	set_panel_userptr(_chatWindow, _interfaceIndicator);
-	set_panel_userptr(_interfaceIndicator, _contactList);
-	top=_inputField;
-	*/
 	updatePanels();
 }
 void Interface::updatePanels()
@@ -47,15 +42,6 @@ void Interface::updatePanels()
 	update_panels();
 	doupdate();
 }
-/*
-void Interface::browse()
-{
-	top = (PANEL *)panel_userptr(top);
-	top_panel(top);	
-	updatePanels();	
-
-}
-*/
 void Interface::deinit()
 {
 	endwin();
@@ -66,33 +52,32 @@ void Interface::winchSignalHandler(int sig)
 	signal(SIGWINCH, SIG_IGN);
 	Interface::interface().recreate();
 	Interface::interface().rewrite();
-	//Interface::interface()._inputField->_win.rewrite();
 	signal(SIGWINCH, winchSignalHandler);
 }
 void Interface::Write(std::string when, int who, std::string what)
 {
-	messages[make_pair(when,who)]= what;
-	if(messages.size()<=LINES-3)_chatWindow->Write(messages.size()-1, when, who, what);
-	if(messages.size()>LINES-3)
+	msg[ActiveChat].Add(what,when,who);
+	if(msg[ActiveChat].messages.size()<=LINES-3) _chatWindow->Write(msg[ActiveChat].messages.size()-1, when, who, what);
+	if(msg[ActiveChat].messages.size()>LINES-3)
 	{
-		ChatScroll=messages.size()-LINES+2;
+		ChatScroll[ActiveChat]=msg[ActiveChat].messages.size()-LINES+2;
 		recreate();
 	}
 }
 void Interface::rewrite()
 {
-	int i=0;
-	for (std::map<std::pair<std::string, int>,std::string>::iterator it = messages.begin(); it != messages.end(); ++it,++i)
+	_chatWindow->ClearWin();
+	for (int it = 0; it != msg[ActiveChat].size; ++it)
 	{
-		if(i<ChatScroll) ;
-		if(i>=ChatScroll&&i<ChatScroll+LINES-2) _chatWindow->Write(i-ChatScroll, it->first.first,it->first.second,it->second);
+		if(it<ChatScroll[ActiveChat]) ;
+		if(it>=ChatScroll[ActiveChat]&&it<ChatScroll[ActiveChat]+LINES-2) _chatWindow->Write(it-ChatScroll[ActiveChat], msg[ActiveChat].date[it], msg[ActiveChat].user[it], msg[ActiveChat].messages[it]);
 	}
 	refresh();
 }
 void Interface::Scroll(int how)
 {
-	if(how<0) if(ChatScroll!=0) ChatScroll+=how;
-	if(how>0) if(messages.size()-ChatScroll>LINES-2) ChatScroll+=how;
+	if(how<0) if(ChatScroll[ActiveChat]!=0) ChatScroll[ActiveChat]+=how;
+	if(how>0) if(msg[ActiveChat].messages.size()-ChatScroll[ActiveChat]>LINES-2) ChatScroll[ActiveChat]+=how;
 	recreate();
 	updatePanels();
 }
@@ -107,4 +92,39 @@ void Interface::ClearInput()
 void Interface::DelInput(int x)
 {
 	_inputField->Del(x);
+}
+void Interface::NextContact()
+{
+	_contactList->GoDown();
+}
+void Interface::PrevContact()
+{
+	_contactList->GoUp();
+}
+void Interface::NewChat()
+{
+	_chatWindow->ClearWin();
+	updatePanels();
+	ActiveChat=ChatNo;
+	ChatNo++;
+	chats.push_back(*(choices+_contactList->GetContact()));
+	_interfaceIndicator->ChangeTalk(chats, ActiveChat);	
+}
+void Interface::RecreateChat()
+{
+	_interfaceIndicator->ChangeTalk(chats, ActiveChat);
+	updatePanels();
+}
+void Interface::ChangeChat()
+{
+	ActiveChat++;
+	ActiveChat=ActiveChat%ChatNo;
+	_interfaceIndicator->ChangeTalk(chats, ActiveChat);
+	rewrite();
+	doupdate();
+}
+void Interface::AddContacts()
+{
+	for(int i=0;i<10;i++)
+		*(choices+i)="nowyU";
 }
