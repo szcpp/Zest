@@ -45,6 +45,7 @@ void P2PConnection::operator()()
 	// we are now listening, so, status = online
 	msg = new Message;
 	msg->type = Message::STATUS_CHANGE_AVAILIBLE;
+	msg->ipAddress = _ipAddress;
 	notifyObservers(msg);
 	delete msg;
 	msg = 0;
@@ -78,9 +79,10 @@ void P2PConnection::operator()()
 		notifyObservers(msg);
 		delete msg;
 	}
-	// so if we are here, the connection is close and peer went offline
+	// so if we are here, the connection is closed and peer went offline
 	msg = new Message;
 	msg->type = Message::STATUS_CHANGE_OFFLINE;
+	msg->ipAddress = _ipAddress;
 	notifyObservers(msg);
 	delete msg;
 }
