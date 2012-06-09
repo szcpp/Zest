@@ -16,12 +16,15 @@ ChatWindow::ChatWindow()
 void ChatWindow::Write(int where, std::string when, int who, std::string what)
 {
 	wattron(_win, COLOR_PAIR(who+1)| A_BOLD);
-	//wattron(_win, COLOR_PAIR(1) | A_BOLD );
-
 	mvwprintw(_win,where,0,when.c_str());
 	wattroff(_win, COLOR_PAIR(who+1) | A_BOLD );
 	wattron(_win,  COLOR_PAIR(who+2) );
 	mvwprintw(_win,where,10,what.c_str());
 	wattroff(_win,  COLOR_PAIR(who+2) );
+	wrefresh(_win);
+}
+void ChatWindow::ClearWin()
+{
+	wclear(_win);
 	wrefresh(_win);
 }

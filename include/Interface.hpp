@@ -3,15 +3,18 @@
 #include "ContactList.hpp"
 #include "ChatWindow.hpp"
 #include "InputField.hpp"
+#include "MessagesList.hpp"
 #include "InterfaceIndicator.hpp"
 #include <map>
+#include <vector>
+#include <string>
 
 /**
 	@brief     Interface class.
  	@details   Singleton pattern implementation, ncurses library usage to create windows.
  	@author    Anna Zaborowska
- 	@version   0.1d
- 	@date      08.06.2012
+ 	@version   0.1e
+ 	@date      09.06.2012
  	@copyright GNU Public License.
  */
 
@@ -24,6 +27,7 @@ class Interface
 		void Scroll(int how);
 		int recreate();
 		void updatePanels();
+		void RecreateChat();
 		void browse();
 		static void winchSignalHandler(int sig);
 		ContactList* _contactList;
@@ -34,12 +38,21 @@ class Interface
 		void WriteInput(int x,char ch);
 		void DelInput(int x);
 		void ClearInput();
-		int ChatScroll=0;
+		void NextContact();
+		void PrevContact();
+		void NewChat();
+		void ChangeChat();
+		int ChatScroll[100];
+		std::string choices[100];
+		std::vector<std::string> chats;
+		void AddContacts();
+		int ActiveChat=0;
+		int ChatNo=0;
 	private:
 		static Interface *interface_;
-		std::map<std::pair<std::string, int>,std::string> messages;
+		MessagesList msg[100];
 		void rewrite();
-		//PANEL* top;
+		PANEL* top;
 		Interface();
 };
 

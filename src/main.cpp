@@ -21,29 +21,6 @@ int main(int argc, char *argv[])
 	memset(&str[0], 0, sizeof(str));
 	while((ch = getch()) != 27)
 	{
-		if(ch== KEY_UP) {Interface::interface().Scroll(-1);}
-		else
-		{
-			if(ch== KEY_DOWN) {Interface::interface().Scroll(1);}
-			else
-			{
-				if(ch==127) // TODO Delete key ;)
-				//if(ch==KEY_BACKSPACE)
-				{
-					Interface::interface().DelInput(x);
-					x--;
-					memset(&str[x], 0, 1);
-					refresh();
-				}
-				else
-				{
-					str[x]=ch;
-					Interface::interface().WriteInput(x,ch);
-					refresh();
-					x++;
-				}
-			}
-		}
 		switch(ch)
 		{
 			case '\n':
@@ -63,6 +40,38 @@ int main(int argc, char *argv[])
 				memset(&str[0], 0, sizeof(str));
 				x=0;
 				Interface::interface().ClearInput();
+				break;
+			case KEY_UP:
+				Interface::interface().Scroll(-1);
+				break;
+			case KEY_DOWN:
+				Interface::interface().Scroll(1);
+				break;
+			case KEY_RIGHT:
+				Interface::interface().NextContact();
+				break;
+			case KEY_LEFT:
+				Interface::interface().PrevContact();
+				break;
+			case 127:
+				Interface::interface().DelInput(x);
+				x--;
+				memset(&str[x], 0, 1);
+				refresh();
+				break;
+			case 43: // +
+				Interface::interface().NewChat();
+				refresh();
+				break;
+			case '\t': //tab
+				Interface::interface().ChangeChat();
+				refresh();
+				break;
+			default:
+				str[x]=ch;
+				Interface::interface().WriteInput(x,ch);
+				refresh();
+				x++;
 				break;
 		}
 	}
