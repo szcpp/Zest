@@ -7,8 +7,8 @@ DIR_MAN=./man/
 DIR_TMP=./tmp/
 
 CXXFLAGS=-O2 -Wall -pedantic -std=c++11 -I $(DIR_HPP)
-LFLAGS=-lpanel -lncurses -lboost_thread -pthread
-OBJS=ChatWindow.o Contact.o ContactList.o InputField.o Interface.o InterfaceIndicator.o main.o P2PConnection.o P2PServer.o
+LFLAGS=-lpanel -lmenu -lncurses -lboost_thread -pthread
+OBJS=ChatWindow.o Contact.o ContactList.o InputField.o Interface.o InterfaceIndicator.o main.o P2PConnection.o P2PServer.o MessagesList.o
 
 # search paths
 vpath %.hpp $(DIR_HPP)

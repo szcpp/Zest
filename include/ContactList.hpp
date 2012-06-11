@@ -5,13 +5,16 @@
 #include <form.h>
 #include <menu.h>
 #include <signal.h>
+#include <cstring>
+#include <string>
+#include <sstream>
 
 /**
 	@brief     ContactList class.
  	@details   Inheritance from class PANEL. While creating it checks statuses of all users, while a message about change of somebody's status is received it is refreshed.
  	@author    Anna Zaborowska
- 	@version   0.1b
- 	@date      08.06.2012
+ 	@version   0.1c
+ 	@date      09.06.2012
  	@copyright GNU Public License.
  */
 
@@ -19,10 +22,14 @@ class ContactList : public PANEL
 {
 	public:
 		ContactList();
-		//refresh();
-		//checkStatuses();
+		void CreateList(std::string* choices);
+		void GoUp();
+		void GoDown();
+		int GetContact();
 	private:
 		WINDOW* _win;
+		ITEM **my_items;	
+		MENU *my_menu;
 };
 
 #endif
