@@ -61,6 +61,10 @@ public:
 		Returns IP address of remote host.
 	*/
 	const std::string getIP() const { return _ipAddress; }
+	/**
+		Class used to throw object on connection failure.
+	*/
+	class xConnectionFailure{};
 private:
 	/**
 		IP address of remote host
@@ -74,10 +78,6 @@ private:
 		Connection handle.
 	*/
 	int _socket;
-	/**
-		Class used to throw object on connection failure.
-	*/
-	class xConnectionFailure{};
 };
 
 #endif
