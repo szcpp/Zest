@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include "Message.hpp"
 
 /**
 	@brief     MessagesList class.
@@ -16,12 +17,33 @@
 class MessagesList
 {
 	public:
+		/**
+			A constructor
+		*/
 		MessagesList();
-		std::vector < std::string > messages;
+		/**
+			Adds new objects into vectors
+			@param what object of class Message containing content of a message
+			@param when date of sending/receiving message
+			@param who number representing color of font for message
+		*/
+		void Add(Message what, std::string when, int who);
+		/**
+			Vector of messages
+		*/
+		std::vector < Message > messages;
+		/**
+			Vector of messages' dates (format hh:mm:ss)
+		*/
 		std::vector < std::string > date;
+		/**
+			Vector of colors for message: 1 for me and 2 for somebody else
+		*/
 		std::vector < int > user;
-		int size=0;
-		void Add(std::string what, std::string when, int who);
+		/**
+			IP Address of person we are talking with
+		*/
+		std::string ip;
 };
 
 #endif

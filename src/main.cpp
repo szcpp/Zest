@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 				refresh();
 				break;
 			case 43: // +
-				Interface::interface().NewChat();
+				Interface::interface().NewChatInit();
 				refresh();
 				break;
 			case '\t': //tab

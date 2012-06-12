@@ -29,22 +29,22 @@ public:
 		@param name a name of contact.
 	*/
 	Contact(const std::string name);
-	~Contact();
+	~Contact(){};
 	/**
 		Checks status of contact
 		@return current status
 	*/
 	Status checkStatus() const { return _status; }
-private:
-	/**
-		Name of contact, which is being displayed on screen.
-	*/
-	std::string _name;
 	/**
 		A pointer to connection object.
 		When contact is not connectet, it is set to null.
 	*/
 	P2PConnection * _connection;
+private:
+	/**
+		Name of contact, which is being displayed on screen.
+	*/
+	std::string _name;
 	/**
 		Current status.
 	*/
