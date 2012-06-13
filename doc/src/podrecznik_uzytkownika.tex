@@ -1,0 +1,55 @@
+\documentclass[11pt,a4paper]{article} 
+
+%lokalizacja
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage[OT4]{fontenc}
+
+%dodatkowe pakiety
+\usepackage{indentfirst}
+\usepackage{enumerate} %listowanie
+\usepackage[dvips]{graphics} %grafiki
+\usepackage{graphicx}
+\usepackage{amsmath} %pakiet potrzebny do \eqref
+\usepackage{tabularx} %tabele
+
+%informację o dokumencie
+\author{Anna Zaborowska, Mateusz Gałażyn}
+\title{Projekt ZEST}
+
+%marginesy
+%\addtolength{\textwidth}{4cm}
+%\addtolength{\hoffset}{-2cm}
+%\addtolength{\textheight}{4cm}
+%\addtolength{\voffset}{-2cm}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\Large {\textsl{Podręcznik użytkownika}}
+\end{center}
+
+\section{Krótki opis projektu}
+
+Projekt Zest jest komunikatorem służącym do bezpiecznej wymiany informacji pomiędzy użytkownikami. Komnunikacja odbywa się w trybie peer to peer i jest szyfrowana za pomocą szyfru asymetrycznego GPG (z kluczem publicznym).
+
+\section{Uruchamianie programu}
+
+Do działania programu niezbędna jest biblioteka ncurses.h, a ponadto dwie dodatkowe z nią skojarzone: panel.h oraz menu.h. Program jest kompilowany za pomocą komendy ,,make'', po czym może zostać uruchomiony poleceniem ,,./zest''.
+
+\section{Obsługa programu}
+
+Działanie komunikatora opiera aię na stosowaniu prostych skrótów klawiszowych:
+\begin{itemize}
+\item[ ENTER ] wysyła wiadomość wpisaną wcześniej w polu wiadomości;
+\item[ KEY\_LEFT ] nawigacja po liście kontaktów; 
+\item[ KEY\_RIGHT ] nawigacja po liście kontaktów; 
+\item[ KEY\_UP ] przesuwanie okna wiadomości (dla liczby wiadomości przekraczającej pojemność okna);
+\item[ KEY\_DOWN ] przesuwanie okna wiadomości (dla liczby wiadomości przekraczającej pojemność okna);
+\item[ + ] otwarcie nowego okna rozmowy dla aktualnie podświetlonego kontaktu;
+\item[ TAB ] przechodzenie do innego okna rozmowy;
+\item[ ESC ] wyjście z programu;
+\end{itemize}
+
+\end{document}
