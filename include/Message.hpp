@@ -35,5 +35,9 @@ public:
 		Content of message.
 	*/
 	std::string content;
+	/**
+		Date (format hh:mm:ss)
+	*/
+	 std::string date;
 };
 #endif

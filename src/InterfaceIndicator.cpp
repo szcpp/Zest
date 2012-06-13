@@ -19,7 +19,7 @@ void InterfaceIndicator::ChangeTalk(std::vector<std::string> chats, int active)
 		mvwprintw(_win,0,x,(chats[i]).c_str());
 		if(i==active) wattroff(_win, COLOR_PAIR(5) | A_BOLD );
 		else wattroff(_win, COLOR_PAIR(5));
-		x+=sizeof(chats[i]);
+		x+=(chats[i]).size()+1;
 	}
 	wrefresh(_win);
 }

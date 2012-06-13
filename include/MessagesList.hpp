@@ -33,17 +33,9 @@ class MessagesList
 		*/
 		std::vector < Message > messages;
 		/**
-			Vector of messages' dates (format hh:mm:ss)
+			A scroll position for chat window
 		*/
-		std::vector < std::string > date;
-		/**
-			Vector of colors for message: 1 for me and 2 for somebody else
-		*/
-		std::vector < int > user;
-		/**
-			IP Address of person we are talking with
-		*/
-		std::string ip;
+		int _ChatScroll;
 };
 
 #endif

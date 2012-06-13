@@ -41,10 +41,6 @@ public:
 		Entry point for a thread.
 	*/
 	void operator()();
-	/**
-		Class used to throw an object, when problem with starting server appears.
-	*/
-	class xCouldNotStart{};
 private:
 	/**
 		A pointer to server thread.
@@ -67,6 +63,10 @@ private:
 		@return true on success
 	*/
 	bool _createSocket();
+	/**
+		Class used to throw an object, when problem with starting server appears.
+	*/
+	class xCouldNotStart{};
 };
 
 #endif

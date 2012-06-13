@@ -72,7 +72,7 @@ class Interface : public Observer<P2PConnection>, public Observer<Message>
 			Writes to an appropriate MessageList, prints message into chat window 
 			@param msgRec received message
 		*/
-		void Print(Message* msgRec);
+		void Write(Message* msgRec);
 		/**
 			Writes onto InputField characters one after another	
 			@param x a position of character to print
@@ -118,7 +118,7 @@ class Interface : public Observer<P2PConnection>, public Observer<Message>
 			Updates Interface after Message received
 			@param msgRec received message
 		*/
-		void update(Message* msgRec);
+		void update(Message* msgRec); // sprawdza ktory kontakt wyslal wiadomosc, kaze mu dodac ja do messagelis i drukuje na ekran
 		/**
 			Updates Interface after getting a new connection
 			@param conn connection opened
@@ -145,25 +145,13 @@ class Interface : public Observer<P2PConnection>, public Observer<Message>
 		*/
 		InterfaceIndicator* _interfaceIndicator;
 		/**
-			An array of objects of class MessagesList
-		*/
-		MessagesList _msg[20];
-		/**
-			A scroll position for every chat window opened
-		*/
-		int _ChatScroll[20];
-		/**
 			An array of contacts' names shown in contact list
 		*/
-		std::string _contactItems[100];
+		std::vector < Contact > _contactItems;
 		/**
 			A vector of contacts' names with whom there are chats opened
 		*/
-		std::vector<std::string> _chatsOpened;
-		/**
-			A vector of objects of class Contact
-		*/
-		std::vector<Contact> _contactsConnected; 
+		std::vector<Contact> _chatsOpened;
 		/**
 			A number of active chat window
 		*/

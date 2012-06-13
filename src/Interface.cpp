@@ -200,5 +200,10 @@ void Interface::update(P2PConnection* conn)
 			 */
 	//std::cout << "New connection from" << conn->getIP() << std::endl;
 	// nowe polaczenie, podlaczamy sie jako listener nowych wiadomosci!
+	for(auto it = _contactItems.begin() ; it != _contactItems.end() ; ++it)
+		if(it->getIp() == conn->getIp())
+		{
+			// przypisanie polaczenia
+		}
 	conn->addObserver(this);
 }
