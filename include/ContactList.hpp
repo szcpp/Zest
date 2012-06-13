@@ -22,14 +22,39 @@
 class ContactList : public PANEL
 {
 	public:
+		/**
+			A constructor
+		*/
 		ContactList();
-		void CreateList(std::vector<Contact*> choices);
+		/**
+			Creates contact list, checks statuses of contacts
+			@param contacts a vector of pointer to Contacts 
+		*/
+		void CreateList(std::vector<Contact*> contacts);
+		/**
+			Moves to the previous item in menu
+		*/
 		void GoUp();
+		/**
+			Moves to the next item in menu
+		*/
 		void GoDown();
-		int GetContact();
+		/**
+			Gets number of contact being selected
+		*/
+		int GetContactNo();
 	private:
+		/**
+			Window in which menu is displayed
+		*/
 		WINDOW* _win;
-		ITEM **my_items;	
+		/**
+			Items in menu
+		*/
+		ITEM **my_items;
+		/**
+			Menu collecting items
+		*/
 		MENU *my_menu;
 };
 

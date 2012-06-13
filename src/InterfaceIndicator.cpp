@@ -8,18 +8,17 @@ InterfaceIndicator::InterfaceIndicator()
 	wbkgd(_win,COLOR_PAIR(5));
 	new_panel(_win);
 }
-void InterfaceIndicator::ChangeTalk(std::vector<std::string> chats, int active)
+void InterfaceIndicator::ChangeTalk(std::vector<Contact*> chats, int active)
 {
 	int x=0;
-
-	for(std::vector<std::string>::size_type i = 0; i<chats.size();++i)
+	for(std::vector<Contact*>::size_type i = 0; i<chats.size();++i)
 	{
 		if(i==active) wattron(_win, COLOR_PAIR(5) | A_BOLD );
 		else wattron(_win, COLOR_PAIR(5));
-		mvwprintw(_win,0,x,(chats[i]).c_str());
+		mvwprintw(_win,0,x,(chats[i]->getName()).c_str());
 		if(i==active) wattroff(_win, COLOR_PAIR(5) | A_BOLD );
 		else wattroff(_win, COLOR_PAIR(5));
-		x+=(chats[i]).size()+1;
+		x+=(chats[i]->getName()).size()+1;
 	}
 	wrefresh(_win);
 }

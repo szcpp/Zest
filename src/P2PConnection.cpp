@@ -44,7 +44,7 @@ void P2PConnection::operator()()
 	Message * msg = 0;
 	// we are now listening, so, status = online
 	msg = new Message;
-	msg->type = Message::STATUS_CHANGE_AVAILIBLE;
+	msg->type = Message::STATUS_CHANGE_AVAILABLE;
 	msg->ipAddress = _ipAddress;
 	notifyObservers(msg);
 	delete msg;

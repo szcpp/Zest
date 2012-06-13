@@ -23,11 +23,9 @@ class MessagesList
 		MessagesList();
 		/**
 			Adds new objects into vectors
-			@param what object of class Message containing content of a message
-			@param when date of sending/receiving message
-			@param who number representing color of font for message
+			@param what object of class Message containing content of a message and date
 		*/
-		void Add(Message what, std::string when, int who);
+		void Add(Message what);
 		/**
 			Vector of messages
 		*/

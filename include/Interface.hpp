@@ -20,7 +20,7 @@
  	@copyright GNU Public License.
  */
 
-class Interface : public Observer<P2PConnection>, public Observer<Message>
+class Interface : public Observer<P2PConnection>
 {
 	public:
 		/**
@@ -28,7 +28,7 @@ class Interface : public Observer<P2PConnection>, public Observer<Message>
 		*/
 		static Interface &interface();
 		/**
-			Inintialization of ncurses - creation of all panels
+			Inintialization of ncurses - creation of all the panels
 		*/
 		void init();
 		/**
@@ -37,7 +37,7 @@ class Interface : public Observer<P2PConnection>, public Observer<Message>
 		void deinit();
 		/**
 			Scrolls chat window
-			@param how a number of scrolled lines (positive for scrolling down and negative for up)
+			@param how the number of scrolled lines (positive for scrolling down and negative for up)
 		*/
 		void Scroll(int how);
 		/**
@@ -49,8 +49,12 @@ class Interface : public Observer<P2PConnection>, public Observer<Message>
 		*/
 		void PrevContact();
 		/**
+			Updates contact list after every change
+		*/	
+		void contactListUpdate();
+		/**
 			Changes chat window for the next one
-		*/
+		*/	
 		void ChangeChat();
 		/**
 			Initializes a new chat
@@ -58,21 +62,25 @@ class Interface : public Observer<P2PConnection>, public Observer<Message>
 		void NewChatInit();
 		/**
 			Initializes a new chat after receiving message from somebody
-			@param msgRec received message
+			@param ip IP address of a sender
+			@return the number of chat window connected with the sender
 		*/
-		void NewChatReceive(Message* msgRec);
+		int NewMessageReceived(const std::string &ip);
+		/**
+			Closes chat window (deletes appropriate item in _chatsOpened)
+		*/	
+		void ChatClose(const std::string &ip);
 		/**
 			Writes to an appropriate MessageList, prints message into chat window and send message to the contact
-			@param when date of sending/receiving message, format hh:mm:ss
-			@param who a number representing color of font for message
 			@param what content of a message
 		*/
-		void Write(std::string when, int who, std::string what);
+		void Write(std::string what);
 		/**
-			Writes to an appropriate MessageList, prints message into chat window 
-			@param msgRec received message
+			Prints the message into an appropriate chat window 
+			@param msgRec received message (to print)
+			@param chatNo the number of chat connected with the sender
 		*/
-		void Write(Message* msgRec);
+		void Write(Message* msgRec, int chatNo);
 		/**
 			Writes onto InputField characters one after another	
 			@param x a position of character to print
@@ -94,6 +102,10 @@ class Interface : public Observer<P2PConnection>, public Observer<Message>
 		*/
 		Interface();
 		/**
+			A destructor
+		*/
+		~Interface();
+		/**
 			Recreates all the panels after the change of size of a terminal
 		*/
 		void recreate();
@@ -111,14 +123,10 @@ class Interface : public Observer<P2PConnection>, public Observer<Message>
 		*/
 		static void winchSignalHandler(int sig);
 		/**
-			Adds contacts to contact list
+			Adds contact to contact list
+			@param contact a contact to be added
 		*/
-		void AddContacts();
-		/**
-			Updates Interface after Message received
-			@param msgRec received message
-		*/
-		void update(Message* msgRec); // sprawdza ktory kontakt wyslal wiadomosc, kaze mu dodac ja do messagelis i drukuje na ekran
+		void AddContact(Contact* contact);
 		/**
 			Updates Interface after getting a new connection
 			@param conn connection opened

@@ -15,6 +15,11 @@ Interface::Interface()
 	signal(SIGWINCH, winchSignalHandler);
 }
 
+Interface::~Interface()
+{
+	deinit();
+}
+
 void Interface::recreate()
 {
 	deinit();
@@ -30,7 +35,6 @@ void Interface::init()
 	clear();
 	_contactList = new ContactList();
 	_chatWindow=new ChatWindow();
-	AddContacts();
 	_contactList->CreateList(_contactItems);
 	_interfaceIndicator = new InterfaceIndicator();	
 	_inputField = new InputField();
@@ -53,14 +57,29 @@ void Interface::winchSignalHandler(int sig)
 	Interface::interface().rewrite();
 	signal(SIGWINCH, winchSignalHandler);
 }
-void Interface::Write(std::string when, int who, std::string what)
+void Interface::Write(std::string what)
 {
+	time_t now; 
+   struct tm *tm;
+	char date[9];
+	now=time(NULL);
+	tm=localtime(&now);
+	date[0] = (tm->tm_hour / 10) + '0' ;
+	date[1] = (tm->tm_hour) % 10 + '0';
+	date[2] = ':';
+	date[3] = (tm->tm_min / 10) + '0' ;
+	date[4] = (tm->tm_min) % 10 + '0';
+	date[5] = ':';
+	date[6] = (tm->tm_sec / 10) + '0' ;
+	date[7] = (tm->tm_sec) % 10 + '0';
+	date[8] = '\0';
 	Message ms;
 	ms.content = what;
 	ms.type = Message::MESSAGE;
-	// jakas metoda wysylajaca ms: _contactsConnected[_ActiveChat]._connection->send(ms); ??
-	_chatsOpened[_ActiveChat]->msgLs.Add(ms,when,who);
-	if((int)_chatsOpened[_ActiveChat]->msgLs.messages.size()<= LINES-3) _chatWindow->Write(_chatsOpened[_ActiveChat]->msgLs.messages.size()-1, when, 1, what);
+	ms.date = date;
+	_chatsOpened[_ActiveChat]->sendMessage(ms);
+	_chatsOpened[_ActiveChat]->msgLs.Add(ms);
+	if((int)_chatsOpened[_ActiveChat]->msgLs.messages.size()<= LINES-3) _chatWindow->Write(_chatsOpened[_ActiveChat]->msgLs.messages.size()-1, date, 1, what);
 	if((int)_chatsOpened[_ActiveChat]->msgLs.messages.size()>LINES-3)
 	{
 		_chatsOpened[_ActiveChat]->msgLs.chatScroll=_chatsOpened[_ActiveChat]->msgLs.messages.size()-LINES+2;
@@ -69,12 +88,17 @@ void Interface::Write(std::string when, int who, std::string what)
 }
 void Interface::rewrite()
 {
+	int who;
 	_chatWindow->ClearWin();
 	for (int it = 0; it != (int)_chatsOpened[_ActiveChat]->msgLs.messages.size(); ++it)
 	{
 		if(it<_chatsOpened[_ActiveChat]->msgLs.chatScroll) ;
 		if(it>=_chatsOpened[_ActiveChat]->msgLs.chatScroll&&it<_chatsOpened[_ActiveChat]->msgLs.chatScroll+LINES-2)
-			_chatWindow->Write(it-_chatsOpened[_ActiveChat]->msgLs.chatScroll, _chatsOpened[_ActiveChat]->msgLs.messages[it].date, _chatsOpened[_ActiveChat]->getName(), _chatsOpened[_ActiveChat]->msgLs.messages[it].content);
+		{
+			if(_chatsOpened[_ActiveChat]->msgLs.messages[it].ipAddress == "") who=1;
+			else who=2;
+			_chatWindow->Write(it-_chatsOpened[_ActiveChat]->msgLs.chatScroll, _chatsOpened[_ActiveChat]->msgLs.messages[it].date, who, _chatsOpened[_ActiveChat]->msgLs.messages[it].content);
+		}
 	}
 	refresh();
 }
@@ -107,25 +131,41 @@ void Interface::PrevContact()
 }
 void Interface::NewChatInit()
 {
+	if(_contactItems[_contactList->GetContactNo()]->getStatus() == Contact::OFFLINE ) return;
+	_chatsOpened.push_back( _contactItems[_contactList->GetContactNo()] );
 	_chatWindow->ClearWin();
 	updatePanels();
 	_ActiveChat=_ChatNo;
 	_ChatNo++;
-	_chatsOpened.push_back(*(_contactItems+_contactList->GetContact()));
-	/* tu trzeba by dodac nowy obiekt klasy Contact do wektora _contactsConnected */
-	//_contactsConnected.push_back(  );
 	_interfaceIndicator->ChangeTalk(_chatsOpened, _ActiveChat);	
 }
-void Interface::NewChatReceive(Message* msgRec)
+void Interface::ChatClose(const std::string &ip)
 {
+	for( auto it = _chatsOpened.begin() ; it != _chatsOpened.end() ; ++it)
+		if((*it)->getIp() == ip)
+			_chatsOpened.erase(it);
+	_ChatNo--;
+	_interfaceIndicator->ChangeTalk(_chatsOpened, _ActiveChat);	
+}
+int Interface::NewMessageReceived(const std::string &ip)
+{
+	int i=0;
+	//jesli mamy juz otwarty czat z tym kims
+	for( auto it = _chatsOpened.begin() ; it != _chatsOpened.end() ; ++it,++i)
+		if((*it)->getIp() == ip)
+		{
+			return i; //kontakt wysle wiadomosc na ekran  do takiego "adresu"
+		}
+	//jesli nie mamy rozpoczetego czatu 
 	_chatWindow->ClearWin();
 	updatePanels();
+	for(auto it = _contactItems.begin() ; it != _contactItems.end() ; ++it)
+		if((*it)->getIp() == ip)
+			_chatsOpened.push_back( *it );
 	_ActiveChat=_ChatNo;
 	_ChatNo++;
-//	_chatsOpened.push_back( /* skas mam wziac nazwe kontaktu z Message? ... Tam jest tylko ip :( */ );
-	/* tu trzeba by dodac nowy obiekt klasy Contact do wektora _contactsConnected */
-	//_contactsConnected.push_back(  );
 	_interfaceIndicator->ChangeTalk(_chatsOpened, _ActiveChat);	
+	return _ActiveChat;
 }
 void Interface::ChangeChat()
 {
@@ -135,80 +175,34 @@ void Interface::ChangeChat()
 	rewrite();
 	doupdate();
 }
-void Interface::AddContacts()
+void Interface::AddContact(Contact* contact)
 {
-		*(_contactItems+0)="nowyUser";
-		*(_contactItems+1)="User";
-		*(_contactItems+2)="nowy";
-		*(_contactItems+3)="nowyU";
-		*(_contactItems+4)="nowyUs";
+	_contactItems.push_back(contact);
+	contactListUpdate();
 }
-void Interface::Print(Message* msgRec)
+void Interface::contactListUpdate()
 {
-	time_t now; 
-   struct tm *tm;
-	char date[9];
-	now=time(NULL);
-	tm=localtime(&now);
-	date[0] = (tm->tm_hour / 10) + '0' ;
-	date[1] = (tm->tm_hour) % 10 + '0';
-	date[2] = ':';
-	date[3] = (tm->tm_min / 10) + '0' ;
-	date[4] = (tm->tm_min) % 10 + '0';
-	date[5] = ':';
-	date[6] = (tm->tm_sec / 10) + '0' ;
-	date[7] = (tm->tm_sec) % 10 + '0';
-	date[8] = '\0';
-	int Sender=0;
-	for(int i=0; i<_ChatNo; i++)
-		if(_chatsOpened[i].ip == msgRec->ipAddress) Sender=i;
-	_chatsOpened[Sender].Add(*msgRec,date,2);
-	if(_chatsOpened[Sender].messages.size()<=LINES-3) _chatWindow->Write(_chatsOpened[Sender].messages.size()-1, date, 2, msgRec->content);
-	if(_chatsOpened[Sender].messages.size()>LINES-3)
+	_contactList->CreateList(_contactItems);
+} 
+void Interface::Write(Message* msgRec, int chatNo)
+{
+	if(_chatsOpened[chatNo]->msgLs.messages.size()<=LINES-3) _chatWindow->Write(_chatsOpened[chatNo]->msgLs.messages.size()-1, msgRec->date, 2, msgRec->content);
+	if(_chatsOpened[chatNo]->msgLs.messages.size()>LINES-3)
 	{
-		_ChatScroll[Sender]=_chatsOpened[Sender].messages.size()-LINES+2;
+		_chatsOpened[chatNo]->msgLs.chatScroll=_chatsOpened[chatNo]->msgLs.messages.size()-LINES+2;
 		recreate();
 	}
 }
-void Interface::update(Message* msgRec)
-{
-	if(msgRec->type == Message::STATUS_CHANGE_OFFLINE)
-	{
-		
-	} //metoda zmieniajaca status Contactu
-	if(msgRec->type == Message::STATUS_CHANGE_AVAILIBLE)
-		{} //metoda zmieniajaca status Contactu
-	if(msgRec->type == Message::MESSAGE)
-	{
-		int newChat=0;
-		for(int i=0; i<_contactsConnected.size() ; i++)
-		{
-	//		if(_contactsConnected[i]._connection->getIP()== msgRec->ipAddress)  // inaczej?
-			{
-				newChat=1;
-				Print(msgRec);
-			}
-		}
-		if(newChat==0) NewChatReceive(msgRec);
-	}
-}
-
 void Interface::update(P2PConnection* conn)
 {
-	/*  no to jeśli ktoś się połączy - >
-								a) czy on rozpoczyna z nami rozmowę ? Wtedy trzeba stworzyć metodę coś jak AddChat() lub wykorzystać ją,
-                  		b) czy tylko się dodaje do listy rozmówców -> wtedy trzeba przerobić AddContact()
-			 */
-	//std::cout << "New connection from" << conn->getIP() << std::endl;
-	// nowe polaczenie, podlaczamy sie jako listener nowych wiadomosci!
 	for(auto it = _contactItems.begin() ; it != _contactItems.end() ; ++it)
-		if((*it)->getIp() == conn->getIp())
+		if((*it)->getIp() == conn->getIP())
 		{
 			(*it)->setConnection(conn);
 			conn->addObserver(*it);
 			return;
 		}
-	Contact* contact = new Contact("nowy_uzytkownik", conn->getIp(), false);
+	Contact* contact = new Contact("nowy_uzytkownik", conn->getIP(), false);
 	contact->setConnection(conn);
-	// TRZEBA COS ZROBIC ZE ZMIENNA CONTACT - DODAC DO LISTY KONTAKTOW
+	AddContact(contact);
 }

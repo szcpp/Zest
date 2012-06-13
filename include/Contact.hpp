@@ -25,7 +25,7 @@ public:
 	*/
 	enum Status
 	{
-		AVAILIBLE = 0,	/**< value representing contact being online */
+		AVAILABLE = 0,	/**< value representing contact being online */
 		OFFLINE = 1,	/**< value representing contact being offline */
 	};
 	/**
@@ -76,11 +76,11 @@ public:
 DONE interface nasluchuje p2pserver, gdy nowe polaczenie, sprawdza ip z lista kontaktow (w notify()), nastepnie przypisuje polaczenie
 DONE do konkretnego kontaktu (zrobic metode od tego ; zrobic metode od usuwania polaczenia, przy nadejsciu Message::Status::STATUS_CHANGE_OFFLINE)
 contact odswieza liste kontaktow za pomoca metody w interface
-DONE po wlaczeniu aplikacji, w oddzielnym watku tworzone sa polaczenia z kontaktami, po zakonczeniu watku interfejs zostaje odswierzony
+DONE po wlaczeniu aplikacji, w oddzielnym watku tworzone sa polaczenia z kontaktami, po zakonczeniu watku interfejs zostaje odswiezony
 *****przy nadejsciu wiadomosci contact otwiera nowe okno rozmowy (ewentualnie sprawdza czy takowe nie istnieje)
 contact przy nadejsciu Message::Status::STATUS_CHANGE_OFFLINE zamyka okno rozmowy
 DONE lista kontaktow w pliku, sprawdzane po odpaleniu aplikacji
-po podlaczeniu nowego kontaktu, dodanie do listy
+DONE po podlaczeniu nowego kontaktu, dodanie do listy
 DONE zapis przy zamykaniu aplikacji
 mozna otwierac okno rozmowy tylko z osobami dostepnymi
 

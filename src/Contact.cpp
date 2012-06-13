@@ -38,11 +38,19 @@ void Contact::update(Message* message)
 	{
 		_status = OFFLINE;
 		delete removeConnection();
-		// TODO zamykanie okna rozmowy
+		Interface::interface().contactListUpdate();
+		Interface::interface().ChatClose(_ip);
 	}
-
-
-	// aktualizacja interfejsu -- dodawanie wiadomosci do interfejsu
+	if(message->type == Message::STATUS_CHANGE_AVAILABLE)
+	{
+		_status = AVAILABLE;
+		Interface::interface().contactListUpdate();
+	}
+	if(message->type == Message::MESSAGE)
+	{
+		Interface::interface().Write(message, Interface::interface().NewMessageReceived(_ip));
+		msgLs.messages.push_back(*message);
+	}
 }
 
 void Contact::setConnection(P2PConnection* connection)

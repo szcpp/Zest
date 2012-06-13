@@ -19,7 +19,7 @@ public:
 	*/
 	enum Type
 	{
-		STATUS_CHANGE_AVAILIBLE = 0,	/**< Availibility notification. */
+		STATUS_CHANGE_AVAILABLE = 0,	/**< Availibility notification. */
 		STATUS_CHANGE_OFFLINE = 1,		/**< Unavailibility notification. */
 		MESSAGE = 2 					/**< Regular message. */
 	};
