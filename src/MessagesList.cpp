@@ -2,9 +2,7 @@
 
 MessagesList::MessagesList(){}
 
-void MessagesList::Add(Message what, std::string when, int who)
+void MessagesList::Add(Message what)
 {
 	messages.push_back(what);
-	date.push_back(when);
-	user.push_back(who);
 }
