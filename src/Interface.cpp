@@ -134,6 +134,7 @@ void Interface::PrevContact()
 }
 void Interface::NewChatInit()
 {
+	if(_contactItems.size()==0) return;
 	if(_contactItems[_contactList->GetContactNo()]->getStatus() == Contact::OFFLINE ) return;
 	for( auto it = _chatsOpened.begin() ; it != _chatsOpened.end() ; ++it)
 		if((*it)->getIp() == _contactItems[_contactList->GetContactNo()] ->getIp())
