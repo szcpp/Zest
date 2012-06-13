@@ -6,8 +6,9 @@
 #include <menu.h>
 #include <signal.h>
 #include <cstring>
-#include <string>
+#include <vector>
 #include <sstream>
+#include "Contact.hpp"
 
 /**
 	@brief     ContactList class.
@@ -22,7 +23,7 @@ class ContactList : public PANEL
 {
 	public:
 		ContactList();
-		void CreateList(std::string* choices);
+		void CreateList(std::vector<Contact*> choices);
 		void GoUp();
 		void GoDown();
 		int GetContact();

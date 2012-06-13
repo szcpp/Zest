@@ -38,6 +38,6 @@ public:
 	/**
 		Date (format hh:mm:ss)
 	*/
-	 std::string date;
+	std::string date;
 };
 #endif

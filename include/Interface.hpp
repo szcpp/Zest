@@ -147,11 +147,11 @@ class Interface : public Observer<P2PConnection>, public Observer<Message>
 		/**
 			An array of contacts' names shown in contact list
 		*/
-		std::vector < Contact > _contactItems;
+		std::vector < Contact* > _contactItems;
 		/**
 			A vector of contacts' names with whom there are chats opened
 		*/
-		std::vector<Contact> _chatsOpened;
+		std::vector<Contact*> _chatsOpened;
 		/**
 			A number of active chat window
 		*/

@@ -7,11 +7,11 @@ ContactList::ContactList()
 	my_items =new ITEM*[100];
 	new_panel(_win);
 }
-void ContactList::CreateList(std::string* choices)
+void ContactList::CreateList(std::vector<Contact*> choices)
 {
 	for(int i = 0; i < 10; ++i)
 	{
-      my_items[i] = new_item(choices[i].c_str(), "");
+      my_items[i] = new_item(choices[i]->getName().c_str(), "");
 	}
 	my_menu = new_menu((ITEM **)my_items);
 

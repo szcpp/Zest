@@ -59,28 +59,29 @@ void Interface::Write(std::string when, int who, std::string what)
 	ms.content = what;
 	ms.type = Message::MESSAGE;
 	// jakas metoda wysylajaca ms: _contactsConnected[_ActiveChat]._connection->send(ms); ??
-	_msg[_ActiveChat].Add(ms,when,who);
-	if(_msg[_ActiveChat].messages.size()<=LINES-3) _chatWindow->Write(_msg[_ActiveChat].messages.size()-1, when, 1, what);
-	if(_msg[_ActiveChat].messages.size()>LINES-3)
+	_chatsOpened[_ActiveChat]->msgLs.Add(ms,when,who);
+	if((int)_chatsOpened[_ActiveChat]->msgLs.messages.size()<= LINES-3) _chatWindow->Write(_chatsOpened[_ActiveChat]->msgLs.messages.size()-1, when, 1, what);
+	if((int)_chatsOpened[_ActiveChat]->msgLs.messages.size()>LINES-3)
 	{
-		_ChatScroll[_ActiveChat]=_msg[_ActiveChat].messages.size()-LINES+2;
+		_chatsOpened[_ActiveChat]->msgLs.chatScroll=_chatsOpened[_ActiveChat]->msgLs.messages.size()-LINES+2;
 		recreate();
 	}
 }
 void Interface::rewrite()
 {
 	_chatWindow->ClearWin();
-	for (int it = 0; it != _msg[_ActiveChat].messages.size(); ++it)
+	for (int it = 0; it != (int)_chatsOpened[_ActiveChat]->msgLs.messages.size(); ++it)
 	{
-		if(it<_ChatScroll[_ActiveChat]) ;
-		if(it>=_ChatScroll[_ActiveChat]&&it<_ChatScroll[_ActiveChat]+LINES-2) _chatWindow->Write(it-_ChatScroll[_ActiveChat], _msg[_ActiveChat].date[it], _msg[_ActiveChat].user[it], _msg[_ActiveChat].messages[it].content);
+		if(it<_chatsOpened[_ActiveChat]->msgLs.chatScroll) ;
+		if(it>=_chatsOpened[_ActiveChat]->msgLs.chatScroll&&it<_chatsOpened[_ActiveChat]->msgLs.chatScroll+LINES-2)
+			_chatWindow->Write(it-_chatsOpened[_ActiveChat]->msgLs.chatScroll, _chatsOpened[_ActiveChat]->msgLs.messages[it].date, _chatsOpened[_ActiveChat]->getName(), _chatsOpened[_ActiveChat]->msgLs.messages[it].content);
 	}
 	refresh();
 }
 void Interface::Scroll(int how)
 {
-	if(how<0) if(_ChatScroll[_ActiveChat]!=0) _ChatScroll[_ActiveChat]+=how;
-	if(how>0) if(_msg[_ActiveChat].messages.size()-_ChatScroll[_ActiveChat]>LINES-2) _ChatScroll[_ActiveChat]+=how;
+	if(how<0) if(_chatsOpened[_ActiveChat]->msgLs.chatScroll!=0) _chatsOpened[_ActiveChat]->msgLs.chatScroll+=how;
+	if(how>0) if(_chatsOpened[_ActiveChat]->msgLs.messages.size()-_chatsOpened[_ActiveChat]->msgLs.chatScroll>LINES-2) _chatsOpened[_ActiveChat]->msgLs.chatScroll+=how;
 	recreate();
 	updatePanels();
 }
@@ -160,12 +161,12 @@ void Interface::Print(Message* msgRec)
 	date[8] = '\0';
 	int Sender=0;
 	for(int i=0; i<_ChatNo; i++)
-		if(_msg[i].ip == msgRec->ipAddress) Sender=i;
-	_msg[Sender].Add(*msgRec,date,2);
-	if(_msg[Sender].messages.size()<=LINES-3) _chatWindow->Write(_msg[Sender].messages.size()-1, date, 2, msgRec->content);
-	if(_msg[Sender].messages.size()>LINES-3)
+		if(_chatsOpened[i].ip == msgRec->ipAddress) Sender=i;
+	_chatsOpened[Sender].Add(*msgRec,date,2);
+	if(_chatsOpened[Sender].messages.size()<=LINES-3) _chatWindow->Write(_chatsOpened[Sender].messages.size()-1, date, 2, msgRec->content);
+	if(_chatsOpened[Sender].messages.size()>LINES-3)
 	{
-		_ChatScroll[Sender]=_msg[Sender].messages.size()-LINES+2;
+		_ChatScroll[Sender]=_chatsOpened[Sender].messages.size()-LINES+2;
 		recreate();
 	}
 }
@@ -201,9 +202,13 @@ void Interface::update(P2PConnection* conn)
 	//std::cout << "New connection from" << conn->getIP() << std::endl;
 	// nowe polaczenie, podlaczamy sie jako listener nowych wiadomosci!
 	for(auto it = _contactItems.begin() ; it != _contactItems.end() ; ++it)
-		if(it->getIp() == conn->getIp())
+		if((*it)->getIp() == conn->getIp())
 		{
-			// przypisanie polaczenia
+			(*it)->setConnection(conn);
+			conn->addObserver(*it);
+			return;
 		}
-	conn->addObserver(this);
+	Contact* contact = new Contact("nowy_uzytkownik", conn->getIp(), false);
+	contact->setConnection(conn);
+	// TRZEBA COS ZROBIC ZE ZMIENNA CONTACT - DODAC DO LISTY KONTAKTOW
 }

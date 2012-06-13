@@ -35,7 +35,7 @@ class MessagesList
 		/**
 			A scroll position for chat window
 		*/
-		int _ChatScroll;
+		int chatScroll;
 };
 
 #endif

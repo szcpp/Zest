@@ -5,6 +5,7 @@
 #include <signal.h>
 #include <string>
 #include <vector>
+#include "Contact.hpp"
 
 /**
 	@brief     InputField class.
@@ -19,7 +20,7 @@ class InterfaceIndicator : public PANEL
 {
 	public:
 		InterfaceIndicator();
-		void ChangeTalk(std::vector<std::string> chats, int active);
+		void ChangeTalk(std::vector<Contact*> chats, int active);
 	private:
 		WINDOW* _win;
 };
