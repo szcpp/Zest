@@ -23,7 +23,6 @@ Contact::~Contact()
 {
 	if(_thread != 0)
 	{
-		// waiting for new sockets never ends, so, we have to kill it!
 		pthread_kill(_thread->native_handle(), SIGKILL);
 		delete _thread;
 		_thread = 0;
