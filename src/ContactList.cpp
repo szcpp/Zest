@@ -23,7 +23,7 @@ void ContactList::CreateList(std::vector<Contact*> contacts)
       my_items[i] = new_item(stat.c_str(),contacts[i]->getName().c_str());
 	}
 	my_menu = new_menu((ITEM **)my_items);
-
+	set_menu_mark(my_menu, "");
    set_menu_win(my_menu, _win);
    post_menu(my_menu);
 	wrefresh(_win);
