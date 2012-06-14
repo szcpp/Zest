@@ -200,10 +200,10 @@ void Interface::contactListUpdate()
 } 
 void Interface::Write(Message* msgRec, int chatNo)
 {
-	if(_chatsOpened[chatNo]->msgLs.messages.size()<=LINES-3) _chatWindow->Write(_chatsOpened[chatNo]->msgLs.messages.size()-1, msgRec->date, 2, msgRec->content);
+	if(_chatsOpened[chatNo]->msgLs.messages.size()<=LINES-3) _chatWindow->Write(_chatsOpened[chatNo]->msgLs.messages.size(), msgRec->date, 2, msgRec->content);
 	if(_chatsOpened[chatNo]->msgLs.messages.size()>LINES-3)
 	{
-		_chatsOpened[chatNo]->msgLs.chatScroll=_chatsOpened[chatNo]->msgLs.messages.size()-LINES+2;
+		_chatsOpened[chatNo]->msgLs.chatScroll=_chatsOpened[chatNo]->msgLs.messages.size()-LINES+3;
 		recreate();
 	}
 }
