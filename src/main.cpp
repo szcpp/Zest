@@ -12,10 +12,10 @@ int main(int argc, char *argv[])
 {
 	std::vector<Contact*> contacts = Contact::loadContacts("contact.list");
 
-	// P2PServer* server = new P2PServer;
+	P2PServer* server = new P2PServer;
 	Interface& ui = Interface::interface();
-	// server->addObserver(&ui);
-	// server->start();
+	server->addObserver(&ui);
+	server->start();
 
 	for(auto it = contacts.begin(); it != contacts.end() ; ++it)
 		ui.AddContact(*it);

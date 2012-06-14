@@ -77,7 +77,20 @@ void P2PConnection::operator()()
 	msg = 0;
 	while(true)
 	{
-		msg = new Message;
+		time_t now; 
+	   	struct tm *tm;
+		char date[9];
+		now=time(NULL);
+		tm=localtime(&now);
+		date[0] = (tm->tm_hour / 10) + '0' ;
+		date[1] = (tm->tm_hour) % 10 + '0';
+		date[2] = ':';
+		date[3] = (tm->tm_min / 10) + '0' ;
+		date[4] = (tm->tm_min) % 10 + '0';
+		date[5] = ':';
+		date[6] = (tm->tm_sec / 10) + '0' ;
+		date[7] = (tm->tm_sec) % 10 + '0';
+		date[8] = '\0';
 		memset(&buffer, 0, 256);
 		// message signature
 		if((i = read(_socket, &receivedSignature, 2)) <= 0)
@@ -102,6 +115,7 @@ void P2PConnection::operator()()
 			//break;
 		msg->content += buffer;
 		msg->ipAddress = _ipAddress;
+		msg->date = date;
 		notifyObservers(msg);
 		delete msg;
 	}
