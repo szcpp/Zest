@@ -16,12 +16,30 @@
 class InputField : public PANEL
 {
 	public:
+		/**
+			A constructor
+		*/
 		InputField();
+		/**
+			Writes into input field single characters
+			@param x a position of a character
+			@param ch a character to print
+		*/
 		void Write(int x,char ch);
+		/**
+			Clears an input field;
+		*/
 		void Clear();
+		/**
+			Deletes single character from specific position
+			@param x a position of a character to delete increased by one
+		*/
 		void Del(int x);
-		WINDOW* _win;
 	private:
+		/**
+			Window in which characters are displayed
+		*/
+		WINDOW* _win;
 };
 
 #endif

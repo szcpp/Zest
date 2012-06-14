@@ -19,9 +19,20 @@
 class InterfaceIndicator : public PANEL
 {
 	public:
+		/**
+			A constructor
+		*/
 		InterfaceIndicator();
+		/**
+			Changes the chat window - prints once again all senders' names with active window being bold
+			@param chats vector of contacts we are talking to
+			@param active the number of an active chat
+		*/
 		void ChangeTalk(std::vector<Contact*> chats, int active);
 	private:
+		/**
+			Window in which names are displayed
+		*/
 		WINDOW* _win;
 };
 

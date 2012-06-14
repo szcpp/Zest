@@ -18,13 +18,26 @@
 class ChatWindow : public PANEL
 {
 	public:
+		/**
+			A constructor
+		*/
 		ChatWindow();
+		/**
+			Writes onto window
+			@param where y position of text
+			@param when date of the message
+			@param what content of the message
+		*/
 		void Write(int where, std::string when,int who, std::string what);
+		/**
+			Clears window
+		*/
 		void ClearWin();
-		WINDOW* _win;
 	private:
-		chtype colourSb;
-		chtype colourMe;
+		/**
+			Window in which messages are displayed
+		*/
+		WINDOW* _win;
 };
 
 #endif

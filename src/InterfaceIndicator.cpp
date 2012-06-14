@@ -10,6 +10,8 @@ InterfaceIndicator::InterfaceIndicator()
 }
 void InterfaceIndicator::ChangeTalk(std::vector<Contact*> chats, int active)
 {
+	wclear(_win);
+	wrefresh(_win);
 	int x=0;
 	for(std::vector<Contact*>::size_type i = 0; i<chats.size();++i)
 	{

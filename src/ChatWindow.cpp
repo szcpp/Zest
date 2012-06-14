@@ -9,8 +9,6 @@ ChatWindow::ChatWindow()
    init_pair(1, COLOR_RED, COLOR_BLACK);
    init_pair(2, COLOR_GREEN, COLOR_BLACK);
    init_pair(3, COLOR_BLUE, COLOR_BLACK);
-	colourMe=COLOR_PAIR(3);
-	colourSb=COLOR_PAIR(2);
 
 	
 	Write(0,"",1,"ZZZZZZZ  EEEEEEE    SSSS   TTTTTTT");
