@@ -12,7 +12,7 @@ public:
 	{
 		if(msg->type == Message::STATUS_CHANGE_OFFLINE)
 			std::cout << "OFF" << std::endl;
-		if(msg->type == Message::STATUS_CHANGE_AVAILIBLE)
+		if(msg->type == Message::STATUS_CHANGE_AVAILABLE)
 			std::cout << "ON" << std::endl;
 		if(msg->type == Message::MESSAGE)
 		{

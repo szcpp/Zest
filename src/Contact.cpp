@@ -4,6 +4,7 @@
 Contact::Contact(const std::string &name, const std::string &ip, const bool createConnection) : 
 _ip(ip), _connection(0), _name(name), _status(OFFLINE), _thread(0)
 {
+	std::cerr << "laduje " << name << " ip:" << ip << std::endl;
 	if(createConnection && ip.size() > 0)
 	{// we are listening
 		try
@@ -12,11 +13,14 @@ _ip(ip), _connection(0), _name(name), _status(OFFLINE), _thread(0)
 		}
 		catch(P2PConnection::xConnectionFailure)
 		{
+			std::cerr << "FAILURE!" << std::cerr;
 			_connection = 0;
 			return;
 		}
 		_startListening();
 	}
+	else
+		std::cerr << "CHUJOWEIP" << ip << std::endl;
 }
 
 Contact::~Contact()
@@ -24,8 +28,8 @@ Contact::~Contact()
 	if(_thread != 0)
 	{
 		pthread_kill(_thread->native_handle(), SIGKILL);
-		delete _thread;
-		_thread = 0;
+		// delete _thread;
+		// _thread = 0;
 	}
 	delete _connection;
 }
@@ -80,6 +84,7 @@ std::vector<Contact*> Contact::loadContacts(const char* filename)
 	while(!file.eof())
 	{
 		file >> alias >> address;
+		std::cerr << alias << "::" << address << std::endl;
 		contacts.push_back(new Contact(alias,address));
 	}
 	file.close();
@@ -98,11 +103,13 @@ void Contact::_startListening()
 {
 	if(_connection->getIP().size() > 3)
 	{
+		std::cerr << "NASLUCHUJE2: " << _connection->getIP() << std::endl;
 		_connection->addObserver(this);
-		_thread = new boost::thread(boost::ref(*_connection));
+		_thread = new boost::thread(*_connection);
 	}
 	else
 	{
+		std::cerr << "CHUJOWEIP2:" << _connection->getIP() << std::endl;
 		delete _connection;
 		_connection = 0;
 	}

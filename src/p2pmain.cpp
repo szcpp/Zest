@@ -57,15 +57,16 @@ int main(int argc, char *argv[])
 	// // instaluje obserwatora w serwerze
 	// c->addObserver(t);
 	// c->start();
+ //        while(true);
 
 	// nawiazuje polaczenie i wysyla wiadomosc
-	// P2PConnection* c = new P2PConnection("127.0.0.1");
-	// Message m;
-	// m.type = Message::MESSAGE;
-	// m.content = "TESTUJE SERWER!";
-	// c->send(m);
-	// c->send(m);
-	// //c->closeSocket()
+	P2PConnection* c = new P2PConnection("127.0.0.1");
+	Message m;
+	m.type = Message::MESSAGE;
+	m.content = "TESTUJE SERWER!";
+	c->send(m);
+	c->send(m);
+	//c->closeSocket()
 
 	return 0;
 }

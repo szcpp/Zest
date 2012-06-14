@@ -1,11 +1,12 @@
 #include "P2PConnection.hpp"
 
 // server
-P2PConnection::P2PConnection(const int &socket, char ip[]) :  _ipAddress(ip), _socket(socket){}
+P2PConnection::P2PConnection(const int &socket, char ip[]) : _ipAddress(ip), _socket(socket) {}
 
 // client
 P2PConnection::P2PConnection(const char host[], const int port)
 {
+	_ipAddress = host;
 	int option = 1;
 
 	sockaddr_in clientAddress;
@@ -49,18 +50,19 @@ P2PConnection::P2PConnection(const char host[], const int port)
 		if(errno != EINPROGRESS)
 		{
 			std::cerr <<  "Error connecting socket " << errno << std::endl;
-			throw xConnectionFailure();
+			//throw xConnectionFailure();
 		}
 	}
-	int error = 0;
-	socklen_t len = sizeof (error);
-	int retval = getsockopt (_socket, SOL_SOCKET, SO_ERROR, &error, &len );
-	if(retval != 0)
-		throw xConnectionFailure();
+	// int error = 0;
+	// socklen_t len = sizeof (error);
+	// int retval = getsockopt (_socket, SOL_SOCKET, SO_ERROR, &error, &len );
+	// if(retval != 0)
+	// 	throw xConnectionFailure();
 }
 
 void P2PConnection::operator()()
 {
+	std::cerr << "NASLUCHUJE " << _ipAddress << std::endl;
 	char buffer[256];
 	unsigned short int i = 0;
 	uint8_t type;
@@ -71,7 +73,7 @@ void P2PConnection::operator()()
 	msg->type = Message::STATUS_CHANGE_AVAILABLE;
 	msg->ipAddress = _ipAddress;
 	notifyObservers(msg);
-	delete msg;
+	// delete msg;
 	msg = 0;
 	while(true)
 	{
@@ -93,22 +95,23 @@ void P2PConnection::operator()()
 		for(i = 0; i < (int)(length/256); ++i)
 		{
 			if(read(_socket, buffer, 256) <= 0)
-				return;
+				break;
 			msg->content += buffer;
 		}
-		if(read(_socket, buffer, length % 256) <= 0)
-			break;
+		if(read(_socket, buffer, length % 256) <= 0);
+			//break;
 		msg->content += buffer;
 		msg->ipAddress = _ipAddress;
 		notifyObservers(msg);
 		delete msg;
 	}
+	std::cerr << "OFFLINE" << std::endl;
 	// so if we are here, the connection is closed and peer went offline
 	msg = new Message;
 	msg->type = Message::STATUS_CHANGE_OFFLINE;
 	msg->ipAddress = _ipAddress;
 	notifyObservers(msg);
-	delete msg;
+	// delete msg;
 }
 
 bool P2PConnection::send(const Message &msg)
