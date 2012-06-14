@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#define COMMUNICATION_PORT 7936
+#define COMMUNICATION_PORT 17936
 #define MAX_CONNECTIONS 100
 
 /**

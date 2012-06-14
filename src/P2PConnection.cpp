@@ -1,7 +1,9 @@
 #include "P2PConnection.hpp"
 
+// server
 P2PConnection::P2PConnection(const int &socket, char ip[]) :  _ipAddress(ip), _socket(socket){}
 
+// client
 P2PConnection::P2PConnection(const char host[], const int port)
 {
 	int option = 1;
@@ -13,6 +15,23 @@ P2PConnection::P2PConnection(const char host[], const int port)
 	clientAddress.sin_addr.s_addr = inet_addr(host);
 
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
+
+    struct timeval timeout;      
+    timeout.tv_sec = 5;
+    timeout.tv_usec = 0;
+
+    if (setsockopt (_socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+	{
+		std::cerr << "Error setting options " << errno << std::endl;
+		throw xConnectionFailure();
+	}
+
+    if (setsockopt (_socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+	{
+		std::cerr << "Error setting options " << errno << std::endl;
+		throw xConnectionFailure();
+	}
+
 	if(_socket < 0)
 	{
 		std::cerr << "Error initializing socket " << errno << std::endl;
@@ -33,6 +52,11 @@ P2PConnection::P2PConnection(const char host[], const int port)
 			throw xConnectionFailure();
 		}
 	}
+	int error = 0;
+	socklen_t len = sizeof (error);
+	int retval = getsockopt (_socket, SOL_SOCKET, SO_ERROR, &error, &len );
+	if(retval != 0)
+		throw xConnectionFailure();
 }
 
 void P2PConnection::operator()()

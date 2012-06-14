@@ -65,10 +65,13 @@ int main(int argc, char *argv[])
 				refresh();
 				break;
 			default:
-				str[x]=ch;
-				ui.WriteInput(x,ch);
-				refresh();
-				x++;
+				if((int)ch> 32 && (int) ch<126)
+				{
+				    str[x]=ch;
+				    Interface::interface().WriteInput(x,ch);
+				    refresh();
+				    x++;
+				}
 				break;
 		}
 	}

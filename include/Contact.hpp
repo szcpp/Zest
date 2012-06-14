@@ -29,6 +29,10 @@ public:
 		OFFLINE = 1,	/**< value representing contact being offline */
 	};
 	/**
+		Messages list
+	*/
+	MessagesList msgLs;
+	/**
 		A constructor
 		@param name a name of contact.
 		@param ip ip address of contact
@@ -70,24 +74,6 @@ public:
 		@return true on success
 	*/
 	bool sendMessage(const Message&);
-	
-	MessagesList msgLs;
-/*
-DONE interface nasluchuje p2pserver, gdy nowe polaczenie, sprawdza ip z lista kontaktow (w notify()), nastepnie przypisuje polaczenie
-DONE do konkretnego kontaktu (zrobic metode od tego ; zrobic metode od usuwania polaczenia, przy nadejsciu Message::Status::STATUS_CHANGE_OFFLINE)
-contact odswieza liste kontaktow za pomoca metody w interface
-DONE po wlaczeniu aplikacji, w oddzielnym watku tworzone sa polaczenia z kontaktami, po zakonczeniu watku interfejs zostaje odswiezony
-*****przy nadejsciu wiadomosci contact otwiera nowe okno rozmowy (ewentualnie sprawdza czy takowe nie istnieje)
-contact przy nadejsciu Message::Status::STATUS_CHANGE_OFFLINE zamyka okno rozmowy
-DONE lista kontaktow w pliku, sprawdzane po odpaleniu aplikacji
-DONE po podlaczeniu nowego kontaktu, dodanie do listy
-DONE zapis przy zamykaniu aplikacji
-mozna otwierac okno rozmowy tylko z osobami dostepnymi
-
-
-dorobic metode send() i metode dodaj wiadomosc + pobierz liste
-
-*/
 	/**
 		Observer - updates interface
 		@param message message

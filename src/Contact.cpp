@@ -2,9 +2,9 @@
 #include "Interface.hpp"
 
 Contact::Contact(const std::string &name, const std::string &ip, const bool createConnection) : 
-_ip(ip), _connection(0), _name(name), _thread(0)
+_ip(ip), _connection(0), _name(name), _status(OFFLINE), _thread(0)
 {
-	if(createConnection)
+	if(createConnection && ip.size() > 0)
 	{// we are listening
 		try
 		{
@@ -96,6 +96,14 @@ void Contact::saveContacts(const char* filename,const std::vector<Contact*>& con
 
 void Contact::_startListening()
 {
-	_connection->addObserver(this);
-	_thread = new boost::thread(boost::ref(*_connection));
+	if(_connection->getIP().size() > 3)
+	{
+		_connection->addObserver(this);
+		_thread = new boost::thread(boost::ref(*_connection));
+	}
+	else
+	{
+		delete _connection;
+		_connection = 0;
+	}
 }
