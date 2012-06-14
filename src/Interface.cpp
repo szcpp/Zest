@@ -152,6 +152,8 @@ void Interface::ChatClose(const std::string &ip)
 		if((*it)->getIp() == ip)
 			_chatsOpened.erase(it);
 	_ChatNo--;
+	_interfaceIndicator->Clear();
+	if(_contactItems.size()==0) return;
 	_interfaceIndicator->ChangeTalk(_chatsOpened, _ActiveChat);	
 }
 int Interface::NewMessageReceived(const std::string &ip)
@@ -187,10 +189,14 @@ void Interface::AddContact(Contact* contact)
 {
 	_contactItems.push_back(contact);
 	contactListUpdate();
+	updatePanels();
+	refresh();
 }
 void Interface::contactListUpdate()
 {
 	_contactList->CreateList(_contactItems);
+	updatePanels();
+	refresh();
 } 
 void Interface::Write(Message* msgRec, int chatNo)
 {

@@ -10,8 +10,6 @@ InterfaceIndicator::InterfaceIndicator()
 }
 void InterfaceIndicator::ChangeTalk(std::vector<Contact*> chats, int active)
 {
-	wclear(_win);
-	wrefresh(_win);
 	int x=0;
 	for(std::vector<Contact*>::size_type i = 0; i<chats.size();++i)
 	{
@@ -22,5 +20,10 @@ void InterfaceIndicator::ChangeTalk(std::vector<Contact*> chats, int active)
 		else wattroff(_win, COLOR_PAIR(5));
 		x+=(chats[i]->getName()).size()+1;
 	}
+	wrefresh(_win);
+}
+void InterfaceIndicator::Clear()
+{
+	wclear(_win);
 	wrefresh(_win);
 }

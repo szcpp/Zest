@@ -29,6 +29,10 @@ class InterfaceIndicator : public PANEL
 			@param active the number of an active chat
 		*/
 		void ChangeTalk(std::vector<Contact*> chats, int active);
+		/**
+			Clears window;
+		*/
+		void Clear();
 	private:
 		/**
 			Window in which names are displayed
