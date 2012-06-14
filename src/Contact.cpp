@@ -10,7 +10,7 @@ _ip(ip), _connection(0), _name(name), _thread(0)
 		{
 			_connection = new P2PConnection(ip.c_str());
 		}
-		catch(P2PConnection::xConnectionFailure &exception)
+		catch(P2PConnection::xConnectionFailure)
 		{
 			_connection = 0;
 			return;

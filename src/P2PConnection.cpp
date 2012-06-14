@@ -16,13 +16,13 @@ P2PConnection::P2PConnection(const char host[], const int port)
 	if(_socket < 0)
 	{
 		std::cerr << "Error initializing socket " << errno << std::endl;
-		throw new xConnectionFailure();
+		throw xConnectionFailure();
 	}
 	
 	if((setsockopt(_socket, SOL_SOCKET, (SO_REUSEADDR | SO_KEEPALIVE), (char*) &option, sizeof(int)) < 0 ))
 	{
 		std::cerr << "Error setting options " << errno << std::endl;
-		throw new xConnectionFailure();
+		throw xConnectionFailure();
 	}
 
 	if(connect(_socket, (struct sockaddr*)&clientAddress, sizeof(clientAddress)) < 0 )
@@ -30,7 +30,7 @@ P2PConnection::P2PConnection(const char host[], const int port)
 		if(errno != EINPROGRESS)
 		{
 			std::cerr <<  "Error connecting socket " << errno << std::endl;
-			throw new xConnectionFailure();
+			throw xConnectionFailure();
 		}
 	}
 }

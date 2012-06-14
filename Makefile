@@ -33,7 +33,9 @@ $(OBJS): %.o: %.cpp
 doc:
 	doxygen $(DIR_DOC)src/doxygen.conf
 	make -C $(DIR_DOC)latex/
-	pdflatex $(DIR_DOC)src/manual.tex
+	pdflatex $(DIR_DOC)src/dokumentacja_koncowa.tex
+	pdflatex $(DIR_DOC)src/dokumentacja_wstepna.tex
+	pdflatex $(DIR_DOC)src/podrecznik_uzytkownika.tex
 	mv $(DIR_DOC)latex/*.pdf $(DIR_DOC)
 	mv *.log $(DIR_TMP)
 	mv *.aux $(DIR_TMP)

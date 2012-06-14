@@ -36,6 +36,11 @@ class Interface : public Observer<P2PConnection>
 		*/
 		void deinit();
 		/**
+			Adds contact to contact list
+			@param contact a contact to be added
+		*/
+		void AddContact(Contact* contact);
+		/**
 			Scrolls chat window
 			@param how the number of scrolled lines (positive for scrolling down and negative for up)
 		*/
@@ -122,11 +127,6 @@ class Interface : public Observer<P2PConnection>
 			@param sig received signal
 		*/
 		static void winchSignalHandler(int sig);
-		/**
-			Adds contact to contact list
-			@param contact a contact to be added
-		*/
-		void AddContact(Contact* contact);
 		/**
 			Updates Interface after getting a new connection
 			@param conn connection opened

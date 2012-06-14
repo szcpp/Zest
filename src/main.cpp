@@ -1,4 +1,6 @@
 #include "Interface.hpp"
+#include "P2PServer.hpp"
+#include "Contact.hpp"
 #include <ctime>
 #include <sstream>
 #include <string>
@@ -8,7 +10,17 @@
 
 int main(int argc, char *argv[])
 {
-	Interface::interface().init();
+	std::vector<Contact*> contacts = Contact::loadContacts("contact.list");
+
+	P2PServer* server = new P2PServer;
+	Interface& ui = Interface::interface();
+	server->addObserver(&ui);
+	server->start();
+
+	for(auto it = contacts.begin(); it != contacts.end() ; ++it)
+		ui.AddContact(*it);
+
+	ui.init();
 	keypad(stdscr, TRUE);
 	int ch;	
 	cbreak();
@@ -21,45 +33,45 @@ int main(int argc, char *argv[])
 		switch(ch)
 		{
 			case '\n':
-				Interface::interface().Write(str);
+				ui.Write(str);
 				memset(&str[0], 0, sizeof(str));
 				x=0;
-				Interface::interface().ClearInput();
+				ui.ClearInput();
 				break;
 			case KEY_UP:
-				Interface::interface().Scroll(-1);
+				ui.Scroll(-1);
 				break;
 			case KEY_DOWN:
-				Interface::interface().Scroll(1);
+				ui.Scroll(1);
 				break;
 			case KEY_RIGHT:
-				Interface::interface().NextContact();
+				ui.NextContact();
 				break;
 			case KEY_LEFT:
-				Interface::interface().PrevContact();
+				ui.PrevContact();
 				break;
 			case 127:
-				Interface::interface().DelInput(x);
+				ui.DelInput(x);
 				x--;
 				memset(&str[x], 0, 1);
 				refresh();
 				break;
 			case 43: // +
-				Interface::interface().NewChatInit();
+				ui.NewChatInit();
 				refresh();
 				break;
 			case '\t': //tab
-				Interface::interface().ChangeChat();
+				ui.ChangeChat();
 				refresh();
 				break;
 			default:
 				str[x]=ch;
-				Interface::interface().WriteInput(x,ch);
+				ui.WriteInput(x,ch);
 				refresh();
 				x++;
 				break;
 		}
 	}
-	Interface::interface().deinit();
+	ui.deinit();
 	return 0;
 }

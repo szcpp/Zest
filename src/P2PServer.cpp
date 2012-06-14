@@ -7,7 +7,7 @@ bool P2PServer::start()
 	if(!_createSocket())
 		return false;
 	_thread = new boost::thread(boost::ref(*this));
-	_thread->join(); // in case of continous running - COMMENT THIS LINE
+	//_thread->join(); // in case of continous running - COMMENT THIS LINE
 	return true;
 }
 
